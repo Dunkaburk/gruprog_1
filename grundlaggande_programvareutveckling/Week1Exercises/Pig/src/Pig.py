@@ -163,14 +163,20 @@ def get_player_choice(player, current):
 # Here you run your tests i.e. call your game logic methods
 # to see that they really work (IO methods not tested here)
 def test():
+
+    win_points = 30  
+    aborted = False
+    test_players = [Player(), Player(), Player()]
+    current = random.choice(test_players)
+
     # This is hard coded test data
     # An array of (no name) Players (probably don't need any name to test)
-    players = get_players()
-    current = random.choice(players)
-    next_player(players, get_player_index(players, current))
-    test_players = [Player(), Player(), Player()]
-    # TODO Use for testing of logical methods (i.e. non-IO methods)
-    LÖL
+    
+    # TODO Use for testing of logical methods (i.e. non-IO methods
+
+
+
+
 if __name__ == "__main__":
     run()
     #test()
