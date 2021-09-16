@@ -170,8 +170,7 @@ def test():
     next_player(players, get_player_index(players, current))
     test_players = [Player(), Player(), Player()]
     # TODO Use for testing of logical methods (i.e. non-IO methods)
-
-
+    LÖL
 if __name__ == "__main__":
     run()
     #test()
