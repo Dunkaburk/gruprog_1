@@ -147,8 +147,7 @@ def game_over_msg(player, is_aborted):
 
 
 def get_player_choice(player, current):
-    print("\n" + str(current.name) + ", You're up!")
-    p_answer = input()
+    p_answer = input("\n" + str(current.name) + ", You're up!\n>")
     return p_answer
 
 

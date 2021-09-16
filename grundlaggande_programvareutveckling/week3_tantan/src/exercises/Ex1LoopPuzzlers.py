@@ -9,6 +9,7 @@
 #
 def puzzle_program():
     # TODO Write solution (for loops) directly here
+    
     pass
 
 

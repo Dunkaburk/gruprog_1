@@ -6,14 +6,28 @@
 def list_methods_program():
     list1 = [1, 2, 3, 4, 5, 6, 7, 8]
 
+    def rotate(list1, k):
+        for i in list1:
+            if i + k >= len(list1):
+                list1[i] = list1[(i+k)-len(list1)]
+            else:
+                list1[i] = list1[i+k]
+
+        print (list1)
+
+
     # # Rotate all elements in the arr k steps to the right (in a circular fashion)
     # # Assume arr.length > 0. NOTE: Original array changed!
-    # rotate(list1, 3)
+    rotate(list1, 1)
     # print(list1 == [6, 7, 8, 1, 2, 3, 4, 5])
     # rotate(list1, 0)
     # print(list1 == [6, 7, 8, 1, 2, 3, 4, 5])
     # rotate(list1, len(list1))
     # print(list1 == [6, 7, 8, 1, 2, 3, 4, 5])
+
+
+
+
 
     # # Same as above but here we have a return value
     # r_list = [1, 2, 3, 4, 5]
@@ -43,6 +57,7 @@ def list_methods_program():
 
 # -------------- Methods --------------------------
 # TODO implements methods here
+
 
 
 if __name__ == "__main__":
