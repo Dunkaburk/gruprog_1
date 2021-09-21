@@ -58,7 +58,7 @@ class NeighborsModel:
         # TODO Update logical state of world based on self.THRESHOLD satisfaction parameter
         pass
 
-    # ########### the rest of this class is already defined, to handle the simulation clock  ###########
+    # ########### the rest of this class is already defined, to handle the simulation clock  ########### 
     def __init__(self, size):
         self.world: World = self.__create_world(size)
         self.observers = []  # for enabling discoupled updating of the view, ignore
