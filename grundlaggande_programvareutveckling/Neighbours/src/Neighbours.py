@@ -49,6 +49,7 @@ class NeighborsModel:
     @staticmethod
     def __create_world(self, size) -> World:
         # TODO Create and populate world according to self.DIST distribution parameters
+        # test
         brave_new_world = []
         brave_new_world = create_dist_list()
         dist_list_into_matrix(brave_new_world)
