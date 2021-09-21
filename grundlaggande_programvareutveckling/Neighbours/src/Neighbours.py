@@ -47,10 +47,39 @@ class NeighborsModel:
     # In this method you should generate a new world
     # using randomization according to the given arguments.
     @staticmethod
-    def __create_world(size) -> World:
+    def __create_world(self, size) -> World:
         # TODO Create and populate world according to self.DIST distribution parameters
         brave_new_world = []
+        brave_new_world = create_dist_list()
+        dist_list_into_matrix(brave_new_world)
+
+
         return brave_new_world
+
+
+    def create_dist_list(self):
+        dist_list = []
+        dist_list = add_actors(Actor.RED, self.DIST[0]) + add_actors(Actor.BLUE, self.DIST[1]) + add_actors(Actor.NONE, self.DIST[2])
+        shuffle(dist_list)
+
+        return dist_list
+
+    
+
+    def add_actors(self, actor_color, andel):
+        actor_amount = (self.size**2) * andel
+        dist_list = []
+        for element in range(actor_amount):
+            dist_list.append(actor_color)
+
+        return dist_list
+
+    def dist_list_into_matrix(dist_list):
+        temp_list = []
+        for element in range(self.size):
+            temp_list = 
+
+
 
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
