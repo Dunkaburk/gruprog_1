@@ -25,7 +25,6 @@ class State(Enum):
 
 World = List[List[Actor]]  # Type alias
 
-
 SIZE = 30
 
 
@@ -37,13 +36,13 @@ def neighbours():
 
 
 class NeighborsModel:
-
     # Tune these numbers to test different distributions or update speeds
-    FRAME_RATE = 20            # Increase number to speed simulation up
+    FRAME_RATE = 20  # Increase number to speed simulation up
     DIST = [0.25, 0.25, 0.50]  # % of RED, BLUE, and NONE
-    THRESHOLD = 0.7            # % of surrounding neighbours that should be like me for satisfaction
+    THRESHOLD = 0.7  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
+
     # ########### These following two methods are what you're supposed to implement  ###########
     # In this method you should generate a new world
     # using randomization according to the given arguments.
@@ -54,18 +53,15 @@ class NeighborsModel:
 
         full_list = create_dist_list()
         brave_new_world = dist_list_into_matrix(full_list)
-
-        print(brave_new_world)
         return brave_new_world
 
- 
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
         # TODO Update logical state of world based on self.THRESHOLD satisfaction parameter
         pass
 
-    # ########### the rest of this class is already defined, to handle the simulation clock  ########### 
+    # ########### the rest of this class is already defined, to handle the simulation clock  ###########
     def __init__(self, size):
         self.world: World = self.__create_world(size)
         self.observers = []  # for enabling discoupled updating of the view, ignore
@@ -111,28 +107,30 @@ def create_dist_list():
     dist_list = []
     dist_list = add_actors(Actor.RED, NeighborsModel.DIST[0]) + add_actors(Actor.BLUE, NeighborsModel.DIST[1]) + add_actors(Actor.NONE, NeighborsModel.DIST[2])
     shuffle(dist_list)
+    print(dist_list)
+    print(len(dist_list))
 
     return dist_list
 
-    
 
 def add_actors(actor_color, distribution):
-    actor_amount = round((NeighborsModel.size**2) * distribution)
+    actor_amount = round((NeighborsModel.size ** 2) * distribution)
     dist_list = []
     for element in range(actor_amount):
         dist_list.append(actor_color)
 
     return dist_list
 
+
 def dist_list_into_matrix(full_list):
     full_matrix = []
     temp_list = []
-    for element in full_list:
+    for k in range(len(full_list)-1):
         for i in range(NeighborsModel.size):
-            temp_list = full_list.pop()
-            
+            temp_list.append(full_list.pop())
+
         full_matrix.append(temp_list)
-        
+
     return full_matrix
 
 
@@ -181,13 +179,13 @@ def count(a_list, to_find):
 # ... but by all means have a look at it, it's fun!
 class NeighboursView:
     # static class variables
-    WIDTH = 400   # Size for window
+    WIDTH = 400  # Size for window
     HEIGHT = 400
     MARGIN = 50
 
     WHITE = (255, 255, 255)
-    RED   = (255,   0,   0)
-    BLUE  = (  0,   0, 255)
+    RED = (255, 0, 0)
+    BLUE = (0, 0, 255)
 
     # Instance methods
 
