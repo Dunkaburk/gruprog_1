@@ -1,7 +1,7 @@
 from typing import List
 from enum import Enum, auto
 from random import *
-
+from math import *
 import pygame as pg
 
 
@@ -43,45 +43,22 @@ class NeighborsModel:
     DIST = [0.25, 0.25, 0.50]  # % of RED, BLUE, and NONE
     THRESHOLD = 0.7            # % of surrounding neighbours that should be like me for satisfaction
 
+    size = SIZE
     # ########### These following two methods are what you're supposed to implement  ###########
     # In this method you should generate a new world
     # using randomization according to the given arguments.
     @staticmethod
-    def __create_world(self, size) -> World:
+    def __create_world(size) -> World:
         # TODO Create and populate world according to self.DIST distribution parameters
         # test
-        brave_new_world = []
-        brave_new_world = create_dist_list()
-        dist_list_into_matrix(brave_new_world)
 
+        full_list = create_dist_list()
+        brave_new_world = dist_list_into_matrix(full_list)
 
+        print(brave_new_world)
         return brave_new_world
 
-
-    def create_dist_list(self):
-        dist_list = []
-        dist_list = add_actors(Actor.RED, self.DIST[0]) + add_actors(Actor.BLUE, self.DIST[1]) + add_actors(Actor.NONE, self.DIST[2])
-        shuffle(dist_list)
-
-        return dist_list
-
-    
-
-    def add_actors(self, actor_color, andel):
-        actor_amount = (self.size**2) * andel
-        dist_list = []
-        for element in range(actor_amount):
-            dist_list.append(actor_color)
-
-        return dist_list
-
-    def dist_list_into_matrix(dist_list):
-        temp_list = []
-        for element in range(self.size):
-            temp_list = 
-
-
-
+ 
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
@@ -128,6 +105,35 @@ class NeighborsModel:
     def __notify_all(self):
         for observer in self.observers:
             observer.on_world_update()
+
+
+def create_dist_list():
+    dist_list = []
+    dist_list = add_actors(Actor.RED, NeighborsModel.DIST[0]) + add_actors(Actor.BLUE, NeighborsModel.DIST[1]) + add_actors(Actor.NONE, NeighborsModel.DIST[2])
+    shuffle(dist_list)
+
+    return dist_list
+
+    
+
+def add_actors(actor_color, distribution):
+    actor_amount = round((NeighborsModel.size**2) * distribution)
+    dist_list = []
+    for element in range(actor_amount):
+        dist_list.append(actor_color)
+
+    return dist_list
+
+def dist_list_into_matrix(full_list):
+    full_matrix = []
+    temp_list = []
+    for element in full_list:
+        for i in range(NeighborsModel.size):
+            temp_list = full_list.pop()
+            
+        full_matrix.append(temp_list)
+        
+    return full_matrix
 
 
 # ---------------- Helper methods ---------------------
