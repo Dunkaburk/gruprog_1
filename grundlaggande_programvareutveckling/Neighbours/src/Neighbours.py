@@ -39,7 +39,7 @@ class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
     FRAME_RATE = 20  # Increase number to speed simulation up
     DIST = [0.25, 0.25, 0.50]  # % of RED, BLUE, and NONE
-    THRESHOLD = 0.7  # % of surrounding neighbours that should be like me for satisfaction
+    THRESHOLD = 0.5  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
 
@@ -127,15 +127,23 @@ class NeighborsModel:
                 current_actor = world[row][column]
                 if current_actor != Actor.NONE:
                     neighbours = get_neighbours(world, row, column)
+                    opposite_actor = get_opposite_actor(current_actor)
                     number_of_similar = count(neighbours, current_actor)
-                    if number_of_similar >= round(minimum_similar * len(neighbours)):
-                        pass
-                    else:
-                        satisfied = False
+                    number_of_none = count(neighbours, opposite_actor)
+                    if number_of_similar <= round(minimum_similar * (len(neighbours)-number_of_none)):
                         self.world[row][column] = Actor.NONE
                         unsatisfied_list.append(current_actor)
-        print(satisfied)
         return unsatisfied_list
+
+def get_opposite_actor(current_actor):
+    if current_actor == Actor.RED:
+        opposite_actor = Actor.BLUE
+    else:
+        opposite_actor = Actor.RED
+    
+    return opposite_actor
+
+
 def create_dist_list():
     dist_list = []
     dist_list = add_actors(Actor.RED, NeighborsModel.DIST[0]) + add_actors(Actor.BLUE, NeighborsModel.DIST[1]) + add_actors(Actor.NONE, NeighborsModel.DIST[2])
@@ -161,9 +169,6 @@ def dist_list_into_matrix(dist_list):
         game_matrix[k // NeighborsModel.size][k % NeighborsModel.size] = dist_list[k]
 
     return game_matrix
-
-
-
 
 
 def get_neighbours(matrix, row, column):
