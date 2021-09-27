@@ -57,7 +57,7 @@ class NeighborsModel:
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        unsatisfied_actors = check_satisfaction(self.world, self.THRESHOLD)
+        unsatisfied_actors = self.check_satisfaction(self.world, self.THRESHOLD)
         self.switch_unsatisfied_agents(unsatisfied_actors)
         
 
@@ -110,11 +110,32 @@ class NeighborsModel:
             random_row = randrange(0, 29)
             random_index = randrange(0, 29)
 
+            print(self.world[random_row][random_index])
             if self.world[random_row][random_index] == Actor.NONE:
                 self.world[random_row][random_index] = unsatisfied_agents[0]
+                print("In loop")
                 unsatisfied_agents.pop(0)
 
+            else:
+                print("Not loop")
 
+
+    def check_satisfaction(self, world, minimum_similar):
+        unsatisfied_list = []
+        for row in range(NeighborsModel.size):
+            for column in range(NeighborsModel.size):
+                current_actor = world[row][column]
+                if current_actor != Actor.NONE:
+                    neighbours = get_neighbours(world, row, column)
+                    number_of_similar = count(neighbours, current_actor)
+                    if number_of_similar >= round(minimum_similar * len(neighbours)):
+                        pass
+                    else:
+                        satisfied = False
+                        self.world[row][column] = Actor.NONE
+                        unsatisfied_list.append(current_actor)
+        print(satisfied)
+        return unsatisfied_list
 def create_dist_list():
     dist_list = []
     dist_list = add_actors(Actor.RED, NeighborsModel.DIST[0]) + add_actors(Actor.BLUE, NeighborsModel.DIST[1]) + add_actors(Actor.NONE, NeighborsModel.DIST[2])
@@ -143,21 +164,6 @@ def dist_list_into_matrix(dist_list):
 
 
 
-def check_satisfaction(world, minimum_similar):
-    unsatisfied_list = []
-    for row in range(NeighborsModel.size):
-        for column in range(NeighborsModel.size):
-            current_actor = world[row][column]
-            if current_actor != Actor.NONE:
-                neighbours = get_neighbours(world, row, column)
-                number_of_similar = count(neighbours, current_actor)
-                if number_of_similar >= round(minimum_similar * len(neighbours)):
-                    pass
-                else:
-                    satisfied = False
-                    unsatisfied_list.append(current_actor)
-    print(satisfied)
-    return unsatisfied_list
 
 
 def get_neighbours(matrix, row, column):
