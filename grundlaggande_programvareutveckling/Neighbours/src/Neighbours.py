@@ -107,7 +107,6 @@ def create_dist_list():
     dist_list = []
     dist_list = add_actors(Actor.RED, NeighborsModel.DIST[0]) + add_actors(Actor.BLUE, NeighborsModel.DIST[1]) + add_actors(Actor.NONE, NeighborsModel.DIST[2])
     shuffle(dist_list)
-    print(dist_list)
     print(len(dist_list))
 
     return dist_list
@@ -122,17 +121,13 @@ def add_actors(actor_color, distribution):
     return dist_list
 
 
-def dist_list_into_matrix(full_list):
-    full_matrix = []
-    temp_list = []
-    for k in range(len(full_list)-1):
-        for i in range(NeighborsModel.size):
-            temp_list.append(full_list.pop())
 
-        full_matrix.append(temp_list)
+def dist_list_into_matrix(dist_list):
+    game_matrix = [[0 for i in range(NeighborsModel.size)] for j in range(NeighborsModel.size)]
+    for k in range(len(dist_list)):
+        game_matrix[k // NeighborsModel.size][k % NeighborsModel.size] = dist_list[k]
 
-    return full_matrix
-
+    return game_matrix
 
 # ---------------- Helper methods ---------------------
 
