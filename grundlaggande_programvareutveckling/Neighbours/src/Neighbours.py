@@ -49,17 +49,16 @@ class NeighborsModel:
     @staticmethod
     def __create_world(size) -> World:
         # TODO Create and populate world according to self.DIST distribution parameters
-        # test
 
-        full_list = create_dist_list()
-        brave_new_world = dist_list_into_matrix(full_list)
+        distributed_list = create_dist_list()
+        brave_new_world = dist_list_into_matrix(distributed_list)
         return brave_new_world
 
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        # TODO Update logical state of world based on self.THRESHOLD satisfaction parameter
-        pass
+        check_satisfaction(self.world, self.THRESHOLD)
+
 
     # ########### the rest of this class is already defined, to handle the simulation clock  ###########
     def __init__(self, size):
@@ -128,6 +127,34 @@ def dist_list_into_matrix(dist_list):
         game_matrix[k // NeighborsModel.size][k % NeighborsModel.size] = dist_list[k]
 
     return game_matrix
+
+
+def check_satisfaction(world, minimum_similar) -> bool:
+    for row in range(NeighborsModel.size):
+        for column in range(NeighborsModel.size):
+            current_actor = world[row][column]
+            if current_actor != Actor.NONE:
+                neighbours = get_neighbours(world, row, column)
+                number_of_similar = count(neighbours, current_actor)
+                if number_of_similar >= round(minimum_similar * len(neighbours)):
+                    satisfied = True
+                else:
+                    satisfied = False
+    print(satisfied)
+    return satisfied
+
+def get_neighbours(matrix, row, column):
+    neighbours = []
+    for i in [-1, 1]:
+        if row + i >= 0 and row + i < len(matrix):
+            neighbours.append(matrix[row + i][column])
+        if column + i >= 0 and column + i < len(matrix):
+            neighbours.append(matrix[row][column + i])
+        if row + i >= 0 and column - i >= 0 and row + i < len(matrix) and column - i < len(matrix):
+            neighbours.append(matrix[row + i][column - i])
+        if row + i >= 0 and column + i >= 0 and row + i < len(matrix) and column + i < len(matrix):
+            neighbours.append(matrix[row + i][column + i])
+    return neighbours
 
 # ---------------- Helper methods ---------------------
 
