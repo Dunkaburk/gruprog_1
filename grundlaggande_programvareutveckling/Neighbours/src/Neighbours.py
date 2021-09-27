@@ -59,6 +59,7 @@ class NeighborsModel:
     def __update_world(self):
         unsatisfied_actors = check_satisfaction(self.world, self.THRESHOLD)
         self.switch_unsatisfied_agents(unsatisfied_actors)
+        
 
 
     # ########### the rest of this class is already defined, to handle the simulation clock  ###########
@@ -141,8 +142,9 @@ def dist_list_into_matrix(dist_list):
     return game_matrix
 
 
-def check_satisfaction(world, minimum_similar) -> list:
-    list_1 = []
+
+def check_satisfaction(world, minimum_similar):
+    unsatisfied_list = []
     for row in range(NeighborsModel.size):
         for column in range(NeighborsModel.size):
             current_actor = world[row][column]
@@ -150,12 +152,13 @@ def check_satisfaction(world, minimum_similar) -> list:
                 neighbours = get_neighbours(world, row, column)
                 number_of_similar = count(neighbours, current_actor)
                 if number_of_similar >= round(minimum_similar * len(neighbours)):
-                    satisfied = True
+                    pass
                 else:
                     satisfied = False
-                    list_1.append(current_actor)
+                    unsatisfied_list.append(current_actor)
     print(satisfied)
-    return list_1
+    return unsatisfied_list
+
 
 def get_neighbours(matrix, row, column):
     neighbours = []
