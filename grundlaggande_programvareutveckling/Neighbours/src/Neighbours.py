@@ -57,7 +57,8 @@ class NeighborsModel:
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        check_satisfaction(self.world, self.THRESHOLD)
+        unsatisfied_actors = check_satisfaction(self.world, self.THRESHOLD)
+        self.switch_unsatisfied_agents(unsatisfied_actors)
 
 
     # ########### the rest of this class is already defined, to handle the simulation clock  ###########
@@ -102,6 +103,17 @@ class NeighborsModel:
             observer.on_world_update()
 
 
+    def switch_unsatisfied_agents(self, unsatisfied_agents):
+        shuffle(unsatisfied_agents)
+        while len(unsatisfied_agents) > 0:
+            random_row = randrange(0, 29)
+            random_index = randrange(0, 29)
+
+            if self.world[random_row][random_index] == Actor.NONE:
+                self.world[random_row][random_index] = unsatisfied_agents[0]
+                unsatisfied_agents.pop(0)
+
+
 def create_dist_list():
     dist_list = []
     dist_list = add_actors(Actor.RED, NeighborsModel.DIST[0]) + add_actors(Actor.BLUE, NeighborsModel.DIST[1]) + add_actors(Actor.NONE, NeighborsModel.DIST[2])
@@ -129,7 +141,8 @@ def dist_list_into_matrix(dist_list):
     return game_matrix
 
 
-def check_satisfaction(world, minimum_similar) -> bool:
+def check_satisfaction(world, minimum_similar) -> list:
+    list_1 = []
     for row in range(NeighborsModel.size):
         for column in range(NeighborsModel.size):
             current_actor = world[row][column]
@@ -140,8 +153,9 @@ def check_satisfaction(world, minimum_similar) -> bool:
                     satisfied = True
                 else:
                     satisfied = False
+                    list_1.append(current_actor)
     print(satisfied)
-    return satisfied
+    return list_1
 
 def get_neighbours(matrix, row, column):
     neighbours = []
@@ -156,17 +170,6 @@ def get_neighbours(matrix, row, column):
             neighbours.append(matrix[row + i][column + i])
     return neighbours
 
-def switch_unsatisfied_agents(self, unsatisfied_agents):
-    
-    shuffle(unsatisfied_agents)
-
-    while len(unsatisfied_agents) > 0:
-        random_row = randint(0, 29)
-        random_index = randint(0, 29)
-
-        if self.world[random_row][random_index] == Actor.NONE:
-            self.world[random_row][random_index] = unsatisfied_agents[0]
-            unsatisfied_agents.pop(0)
 
     
 
