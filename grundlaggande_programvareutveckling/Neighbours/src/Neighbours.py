@@ -156,6 +156,22 @@ def get_neighbours(matrix, row, column):
             neighbours.append(matrix[row + i][column + i])
     return neighbours
 
+def switch_unsatisfied_agents(self, unsatisfied_agents):
+    
+    shuffle(unsatisfied_agents)
+
+    while len(unsatisfied_agents) > 0:
+        random_row = randint(0, 29)
+        random_index = randint(0, 29)
+
+        if self.world[random_row][random_index] == Actor.NONE:
+            self.world[random_row][random_index] = unsatisfied_agents[0]
+            unsatisfied_agents.pop(0)
+
+    
+
+    
+
 # ---------------- Helper methods ---------------------
 
 # Check if inside world
