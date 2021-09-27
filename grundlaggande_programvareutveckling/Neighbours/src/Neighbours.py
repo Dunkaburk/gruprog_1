@@ -57,7 +57,7 @@ class NeighborsModel:
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        check_satisfaction(self.world, self.THRESHOLD)
+        satisfied = check_satisfaction(self.world, self.THRESHOLD)
 
 
     # ########### the rest of this class is already defined, to handle the simulation clock  ###########
@@ -129,7 +129,8 @@ def dist_list_into_matrix(dist_list):
     return game_matrix
 
 
-def check_satisfaction(world, minimum_similar) -> bool:
+def check_satisfaction(world, minimum_similar):
+    unsatisfied_list = []
     for row in range(NeighborsModel.size):
         for column in range(NeighborsModel.size):
             current_actor = world[row][column]
@@ -137,11 +138,10 @@ def check_satisfaction(world, minimum_similar) -> bool:
                 neighbours = get_neighbours(world, row, column)
                 number_of_similar = count(neighbours, current_actor)
                 if number_of_similar >= round(minimum_similar * len(neighbours)):
-                    satisfied = True
+                    pass
                 else:
                     satisfied = False
-    print(satisfied)
-    return satisfied
+
 
 def get_neighbours(matrix, row, column):
     neighbours = []
