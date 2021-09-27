@@ -38,7 +38,7 @@ def neighbours():
 class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
     FRAME_RATE = 20  # Increase number to speed simulation up
-    DIST = [0.25, 0.25, 0.50]  # % of RED, BLUE, and NONE
+    DIST = [0.35, 0.35, 0.30]  # % of RED, BLUE, and NONE
     THRESHOLD = 0.5  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
