@@ -113,11 +113,7 @@ class NeighborsModel:
             print(self.world[random_row][random_index])
             if self.world[random_row][random_index] == Actor.NONE:
                 self.world[random_row][random_index] = unsatisfied_agents[0]
-                print("In loop")
                 unsatisfied_agents.pop(0)
-
-            else:
-                print("Not loop")
 
 
     def check_satisfaction(self, world):
@@ -127,7 +123,6 @@ class NeighborsModel:
                 current_actor = world[row][column]
                 if current_actor != Actor.NONE:
                     neighbours = get_neighbours(world, row, column)
-                    # opposite_actor = get_opposite_actor(current_actor)
                     number_of_similar = count(neighbours, current_actor)
                     number_of_none = count(neighbours, Actor.NONE)
                     if number_of_similar < ceil(self.THRESHOLD * (len(neighbours)-number_of_none)):
