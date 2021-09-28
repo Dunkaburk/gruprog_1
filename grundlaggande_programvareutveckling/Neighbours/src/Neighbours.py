@@ -25,7 +25,7 @@ class State(Enum):
 
 World = List[List[Actor]]  # Type alias
 
-SIZE = 47
+SIZE = 30
 
 
 def neighbours():
@@ -199,13 +199,27 @@ def test():
 
     th = 0.5  # Simpler threshold used for testing
 
+    dist = [0.004, 0.004, 0.92]
+
+    n = NeighborsModel(SIZE)
+
+
+
+
     size = len(test_world)
     print(is_valid_location(size, 0, 0))
     print(not is_valid_location(size, -1, 0))
     print(not is_valid_location(size, 0, 3))
     print(is_valid_location(size, 2, 2))
+    print((add_actors(Actor.BLUE, dist[0])))
 
-    # TODO More tests
+    #print(get_neighbours(test_world, 0, 0) == [Actor.NONE, Actor.RED, Actor.BLUE])
+    #print((add_actors(Actor.BLUE, dist[0])) == [Actor.BLUE, Actor.BLUE, Actor.BLUE, Actor.BLUE])
+    
+    #print(n.check_satisfaction(test_world))
+    
+
+
 
     exit(0)
 
@@ -291,4 +305,4 @@ class NeighboursView:
 
 
 if __name__ == "__main__":
-    neighbours()
+    test()
