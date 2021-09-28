@@ -39,7 +39,7 @@ class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
     FRAME_RATE = 20  # Increase number to speed simulation up
     DIST = [0.35, 0.35, 0.3]  # % of RED, BLUE, and NONE
-    THRESHOLD = 0.4  # % of surrounding neighbours that should be like me for satisfaction
+    THRESHOLD = 0.7  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
 
@@ -122,26 +122,26 @@ class NeighborsModel:
 
     def check_satisfaction(self, world, minimum_similar):
         unsatisfied_list = []
-        for row in range(NeighborsModel.size):
-            for column in range(NeighborsModel.size):
+        for row in range(self.size):
+            for column in range(self.size):
                 current_actor = world[row][column]
                 if current_actor != Actor.NONE:
                     neighbours = get_neighbours(world, row, column)
-                    opposite_actor = get_opposite_actor(current_actor)
+                    # opposite_actor = get_opposite_actor(current_actor)
                     number_of_similar = count(neighbours, current_actor)
-                    number_of_none = count(neighbours, opposite_actor)
+                    number_of_none = count(neighbours, Actor.NONE)
                     if number_of_similar <= ceil(minimum_similar * (len(neighbours)-number_of_none)):
                         self.world[row][column] = Actor.NONE
                         unsatisfied_list.append(current_actor)
         return unsatisfied_list
 
-def get_opposite_actor(current_actor):
+""" def get_opposite_actor(current_actor):
     if current_actor == Actor.RED:
         opposite_actor = Actor.BLUE
     else:
         opposite_actor = Actor.RED
     
-    return opposite_actor
+    return opposite_actor """
 
 
 def create_dist_list():
