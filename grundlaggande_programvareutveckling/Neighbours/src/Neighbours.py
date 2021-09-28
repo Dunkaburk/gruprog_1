@@ -38,8 +38,8 @@ def neighbours():
 class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
     FRAME_RATE = 20  # Increase number to speed simulation up
-    DIST = [0.35, 0.35, 0.30]  # % of RED, BLUE, and NONE
-    THRESHOLD = 0.5  # % of surrounding neighbours that should be like me for satisfaction
+    DIST = [0.35, 0.35, 0.3]  # % of RED, BLUE, and NONE
+    THRESHOLD = 0.4  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
 
@@ -130,7 +130,7 @@ class NeighborsModel:
                     opposite_actor = get_opposite_actor(current_actor)
                     number_of_similar = count(neighbours, current_actor)
                     number_of_none = count(neighbours, opposite_actor)
-                    if number_of_similar <= round(minimum_similar * (len(neighbours)-number_of_none)):
+                    if number_of_similar <= ceil(minimum_similar * (len(neighbours)-number_of_none)):
                         self.world[row][column] = Actor.NONE
                         unsatisfied_list.append(current_actor)
         return unsatisfied_list
