@@ -25,7 +25,7 @@ class State(Enum):
 
 World = List[List[Actor]]  # Type alias
 
-SIZE = 30
+SIZE = 47
 
 
 def neighbours():
@@ -39,7 +39,7 @@ class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
     FRAME_RATE = 20  # Increase number to speed simulation up
     DIST = [0.35, 0.35, 0.3]  # % of RED, BLUE, and NONE
-    THRESHOLD = 0.7  # % of surrounding neighbours that should be like me for satisfaction
+    THRESHOLD = 0.5  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
 
@@ -57,7 +57,7 @@ class NeighborsModel:
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        unsatisfied_actors = self.check_satisfaction(self.world, self.THRESHOLD)
+        unsatisfied_actors = self.check_satisfaction(self.world)
         self.switch_unsatisfied_agents(unsatisfied_actors)
         
 
@@ -107,8 +107,8 @@ class NeighborsModel:
     def switch_unsatisfied_agents(self, unsatisfied_agents):
         shuffle(unsatisfied_agents)
         while len(unsatisfied_agents) > 0:
-            random_row = randrange(0, 29)
-            random_index = randrange(0, 29)
+            random_row = randrange(0, self.size - 1)
+            random_index = randrange(0, self.size - 1)
 
             print(self.world[random_row][random_index])
             if self.world[random_row][random_index] == Actor.NONE:
@@ -120,7 +120,7 @@ class NeighborsModel:
                 print("Not loop")
 
 
-    def check_satisfaction(self, world, minimum_similar):
+    def check_satisfaction(self, world):
         unsatisfied_list = []
         for row in range(self.size):
             for column in range(self.size):
@@ -130,18 +130,12 @@ class NeighborsModel:
                     # opposite_actor = get_opposite_actor(current_actor)
                     number_of_similar = count(neighbours, current_actor)
                     number_of_none = count(neighbours, Actor.NONE)
-                    if number_of_similar <= ceil(minimum_similar * (len(neighbours)-number_of_none)):
+                    if number_of_similar < ceil(self.THRESHOLD * (len(neighbours)-number_of_none)):
                         self.world[row][column] = Actor.NONE
                         unsatisfied_list.append(current_actor)
         return unsatisfied_list
 
-""" def get_opposite_actor(current_actor):
-    if current_actor == Actor.RED:
-        opposite_actor = Actor.BLUE
-    else:
-        opposite_actor = Actor.RED
-    
-    return opposite_actor """
+
 
 
 def create_dist_list():
@@ -234,8 +228,8 @@ def count(a_list, to_find):
 # ... but by all means have a look at it, it's fun!
 class NeighboursView:
     # static class variables
-    WIDTH = 400  # Size for window
-    HEIGHT = 400
+    WIDTH = 700  # Size for window
+    HEIGHT = 700
     MARGIN = 50
 
     WHITE = (255, 255, 255)
