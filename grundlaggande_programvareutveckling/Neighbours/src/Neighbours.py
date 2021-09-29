@@ -25,7 +25,7 @@ class State(Enum):
 
 World = List[List[Actor]]  # Type alias
 
-SIZE = 30
+SIZE = 50
 
 
 def neighbours():
@@ -37,7 +37,7 @@ def neighbours():
 
 class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
-    FRAME_RATE = 200  # Increase number to speed simulation up
+    FRAME_RATE = 2000  # Increase number to speed simulation up
     DIST = [0.7, 0.2, 0.1]  # % of RED, BLUE, and NONE
     THRESHOLD = 0.8  # % of surrounding neighbours that should be like me for satisfaction
 
@@ -57,9 +57,9 @@ class NeighborsModel:
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        none_list = self.get_none_actor_index()
+        
         unsatisfied_actors = self.pop_unsatisfied_actors()
-        self.insert_unsatisfied_actors(none_list,unsatisfied_actors)
+        self.insert_unsatisfied_actors(unsatisfied_actors)
         
 
 
@@ -105,13 +105,12 @@ class NeighborsModel:
             observer.on_world_update()
 
 
-    def insert_unsatisfied_actors(self, none_index_list, unsatisfied_agents):
+    def insert_unsatisfied_actors(self, unsatisfied_agents):
         shuffle(unsatisfied_agents)
+        none_index_list = self.get_none_actor_index()
         shuffle(none_index_list)
-        while len(none_index_list)-1 > 0:
+        while len(none_index_list) > 0 and len(unsatisfied_agents):
             self.world[none_index_list[0][0]][none_index_list[0][1]] = unsatisfied_agents.pop(0)
-            
-            print (self.world[none_index_list[0][0]][none_index_list[0][1]])
             none_index_list.pop(0)
         
 
@@ -133,7 +132,7 @@ class NeighborsModel:
                         index_of_none.append(row)
                         index_of_none.append(col)
                         list_of_none_index.append(index_of_none)
-                        print(list_of_none_index)
+                        
                         
             return list_of_none_index
     def pop_unsatisfied_actors(self):
