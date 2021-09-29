@@ -25,7 +25,7 @@ class State(Enum):
 
 World = List[List[Actor]]  # Type alias
 
-SIZE = 30
+SIZE = 300
 
 
 def neighbours():
@@ -37,9 +37,9 @@ def neighbours():
 
 class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
-    FRAME_RATE = 20  # Increase number to speed simulation up
-    DIST = [0.4, 0.4, 0.2]  # % of RED, BLUE, and NONE
-    THRESHOLD = 0.5  # % of surrounding neighbours that should be like me for satisfaction
+    FRAME_RATE = 200  # Increase number to speed simulation up
+    DIST = [0.7, 0.2, 0.1]  # % of RED, BLUE, and NONE
+    THRESHOLD = 0.8  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
 
@@ -58,7 +58,7 @@ class NeighborsModel:
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
         unsatisfied_actors = self.get_unsatisfied_actors(self.world)
-        self.switch_unsatisfied_agents(unsatisfied_actors)
+        self.insert_unsatisfied_actors(unsatisfied_actors)
         
 
 
@@ -104,15 +104,22 @@ class NeighborsModel:
             observer.on_world_update()
 
 
-    def switch_unsatisfied_agents(self, unsatisfied_agents):
+    def insert_unsatisfied_actors(self, unsatisfied_agents):
         shuffle(unsatisfied_agents)
-        while len(unsatisfied_agents) > 0:
-            random_row = randrange(0, self.size - 1)
-            random_index = randrange(0, self.size - 1)
 
-            if self.world[random_row][random_index] == Actor.NONE:
-                self.world[random_row][random_index] = unsatisfied_agents[0]
-                unsatisfied_agents.pop(0)
+        test_list_1 = [[0, 0], [0, 1], [2, 1]]
+
+        while len(unsatisfied_agents) > 0:
+            self.world[test_list_1[0][0]][test_list_1[0][1]] = unsatisfied_agents[0]
+            unsatisfied_agents.pop(0)
+            test_list_1.pop(0)
+
+            # random_row = randrange(0, self.size - 1)
+            # random_index = randrange(0, self.size - 1)
+
+            # if self.world[random_row][random_index] == Actor.NONE:
+            #     self.world[random_row][random_index] = unsatisfied_agents[0]
+            #     unsatisfied_agents.pop(0)
 
 
     def get_unsatisfied_actors(self, world):
@@ -317,4 +324,4 @@ class NeighboursView:
 
 if __name__ == "__main__":
     neighbours()
-    test()
+    
