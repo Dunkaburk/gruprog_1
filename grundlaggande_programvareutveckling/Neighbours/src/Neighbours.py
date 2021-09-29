@@ -57,7 +57,7 @@ class NeighborsModel:
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        unsatisfied_actors = self.get_unsatisfied_actors(self.world)
+        unsatisfied_actors = self.pop_unsatisfied_actors(self.world)
         self.switch_unsatisfied_agents(unsatisfied_actors)
         
 
@@ -104,6 +104,17 @@ class NeighborsModel:
             observer.on_world_update()
 
 
+    def get_none_actor_index(self):
+        list_of_none_index = []
+        index_of_none = []
+        for row in range(self.size):
+            for col in range(self.size):
+                if self.world[row][col] == Actor.NONE:
+                    index_of_none.append(row, col)
+                    list_of_none_index.append(index_of_none)
+        return list_of_none_index
+
+
     def switch_unsatisfied_agents(self, unsatisfied_agents):
         shuffle(unsatisfied_agents)
         while len(unsatisfied_agents) > 0:
@@ -115,13 +126,13 @@ class NeighborsModel:
                 unsatisfied_agents.pop(0)
 
 
-    def get_unsatisfied_actors(self, world):
+    def pop_unsatisfied_actors(self):
         unsatisfied_list = []
         for row in range(self.size):
             for column in range(self.size):
-                current_actor = world[row][column]
+                current_actor = self.world[row][column]
                 if current_actor != Actor.NONE:
-                    if self.check_if_unsatisfied(current_actor, world, row, column):
+                    if self.check_if_unsatisfied(current_actor, self.world, row, column):
                         self.world[row][column] = Actor.NONE
                         unsatisfied_list.append(current_actor)
         return unsatisfied_list
