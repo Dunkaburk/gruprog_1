@@ -25,7 +25,7 @@ class State(Enum):
 
 World = List[List[Actor]]  # Type alias
 
-SIZE = 47
+SIZE = 30
 
 
 def neighbours():
@@ -57,7 +57,7 @@ class NeighborsModel:
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        unsatisfied_actors = self.check_satisfaction(self.world)
+        unsatisfied_actors = self.get_unsatisfied_actors(self.world)
         self.switch_unsatisfied_agents(unsatisfied_actors)
         
 
@@ -113,27 +113,29 @@ class NeighborsModel:
             print(self.world[random_row][random_index])
             if self.world[random_row][random_index] == Actor.NONE:
                 self.world[random_row][random_index] = unsatisfied_agents[0]
-                print("In loop")
                 unsatisfied_agents.pop(0)
 
-            else:
-                print("Not loop")
 
 
-    def check_satisfaction(self, world):
+    def get_unsatisfied_actors(self, world):
         unsatisfied_list = []
         for row in range(self.size):
             for column in range(self.size):
                 current_actor = world[row][column]
                 if current_actor != Actor.NONE:
-                    neighbours = get_neighbours(world, row, column)
-                    # opposite_actor = get_opposite_actor(current_actor)
-                    number_of_similar = count(neighbours, current_actor)
-                    number_of_none = count(neighbours, Actor.NONE)
-                    if number_of_similar < ceil(self.THRESHOLD * (len(neighbours)-number_of_none)):
+                    if self.check_if_unsatisfied(current_actor, world, row, column):
                         self.world[row][column] = Actor.NONE
                         unsatisfied_list.append(current_actor)
         return unsatisfied_list
+
+    def check_if_unsatisfied(self, current, world, row, column):
+        neighbours = get_neighbours(world, row, column)
+        number_of_similar = count(neighbours, current)
+        number_of_none = count(neighbours, Actor.NONE)
+        if number_of_similar < ceil(self.THRESHOLD * (len(neighbours)-number_of_none)):
+            return True
+        else: 
+            return False
 
 
 
@@ -158,9 +160,9 @@ def add_actors(actor_color, distribution):
 
 
 def dist_list_into_matrix(dist_list):
-    game_matrix = [[0 for i in range(NeighborsModel.size)] for j in range(NeighborsModel.size)]
-    for k in range(len(dist_list)):
-        game_matrix[k // NeighborsModel.size][k % NeighborsModel.size] = dist_list[k]
+    game_matrix = [[0 for row in range(NeighborsModel.size)] for col in range(NeighborsModel.size)]
+    for position in range(len(dist_list)):
+        game_matrix[position // NeighborsModel.size][position % NeighborsModel.size] = dist_list[position]
 
     return game_matrix
 
