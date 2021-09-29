@@ -25,7 +25,7 @@ class State(Enum):
 
 World = List[List[Actor]]  # Type alias
 
-SIZE = 300
+SIZE = 30
 
 
 def neighbours():
@@ -57,8 +57,9 @@ class NeighborsModel:
     # This is the method called by the timer to update the world
     # (i.e move unsatisfied) each "frame".
     def __update_world(self):
-        unsatisfied_actors = self.get_unsatisfied_actors(self.world)
-        self.insert_unsatisfied_actors(unsatisfied_actors)
+        none_list = self.get_none_actor_index()
+        unsatisfied_actors = self.pop_unsatisfied_actors()
+        self.insert_unsatisfied_actors(none_list,unsatisfied_actors)
         
 
 
@@ -104,15 +105,15 @@ class NeighborsModel:
             observer.on_world_update()
 
 
-    def insert_unsatisfied_actors(self, unsatisfied_agents):
+    def insert_unsatisfied_actors(self, none_index_list, unsatisfied_agents):
         shuffle(unsatisfied_agents)
-
-        test_list_1 = [[0, 0], [0, 1], [2, 1]]
-
-        while len(unsatisfied_agents) > 0:
-            self.world[test_list_1[0][0]][test_list_1[0][1]] = unsatisfied_agents[0]
-            unsatisfied_agents.pop(0)
-            test_list_1.pop(0)
+        shuffle(none_index_list)
+        while len(none_index_list)-1 > 0:
+            self.world[none_index_list[0][0]][none_index_list[0][1]] = unsatisfied_agents.pop(0)
+            
+            print (self.world[none_index_list[0][0]][none_index_list[0][1]])
+            none_index_list.pop(0)
+        
 
             # random_row = randrange(0, self.size - 1)
             # random_index = randrange(0, self.size - 1)
@@ -122,13 +123,26 @@ class NeighborsModel:
             #     unsatisfied_agents.pop(0)
 
 
-    def get_unsatisfied_actors(self, world):
+    def get_none_actor_index(self):
+            list_of_none_index = []
+            
+            for row in range(self.size):
+                for col in range(self.size):
+                    if self.world[row][col] == Actor.NONE:
+                        index_of_none = []
+                        index_of_none.append(row)
+                        index_of_none.append(col)
+                        list_of_none_index.append(index_of_none)
+                        print(list_of_none_index)
+                        
+            return list_of_none_index
+    def pop_unsatisfied_actors(self):
         unsatisfied_list = []
         for row in range(self.size):
             for column in range(self.size):
-                current_actor = world[row][column]
+                current_actor = self.world[row][column]
                 if current_actor != Actor.NONE:
-                    if self.check_if_unsatisfied(current_actor, world, row, column):
+                    if self.check_if_unsatisfied(current_actor, self.world, row, column):
                         self.world[row][column] = Actor.NONE
                         unsatisfied_list.append(current_actor)
         return unsatisfied_list
@@ -325,3 +339,4 @@ class NeighboursView:
 if __name__ == "__main__":
     neighbours()
     
+    #test()
