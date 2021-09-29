@@ -110,7 +110,6 @@ class NeighborsModel:
             random_row = randrange(0, self.size - 1)
             random_index = randrange(0, self.size - 1)
 
-            print(self.world[random_row][random_index])
             if self.world[random_row][random_index] == Actor.NONE:
                 self.world[random_row][random_index] = unsatisfied_agents[0]
                 unsatisfied_agents.pop(0)
@@ -143,7 +142,6 @@ def create_dist_list():
     dist_list = []
     dist_list = add_actors(Actor.RED, NeighborsModel.DIST[0]) + add_actors(Actor.BLUE, NeighborsModel.DIST[1]) + add_actors(Actor.NONE, NeighborsModel.DIST[2])
     shuffle(dist_list)
-    print(len(dist_list))
 
     return dist_list
 
