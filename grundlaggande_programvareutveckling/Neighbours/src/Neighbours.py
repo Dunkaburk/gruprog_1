@@ -38,7 +38,7 @@ def neighbours():
 class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
     FRAME_RATE = 20  # Increase number to speed simulation up
-    DIST = [0.35, 0.35, 0.3]  # % of RED, BLUE, and NONE
+    DIST = [0.4, 0.4, 0.2]  # % of RED, BLUE, and NONE
     THRESHOLD = 0.5  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
@@ -114,7 +114,6 @@ class NeighborsModel:
             if self.world[random_row][random_index] == Actor.NONE:
                 self.world[random_row][random_index] = unsatisfied_agents[0]
                 unsatisfied_agents.pop(0)
-
 
 
     def get_unsatisfied_actors(self, world):
@@ -206,15 +205,36 @@ def test():
 
     th = 0.5  # Simpler threshold used for testing
 
+    dist = [0.004, 0.004, 0.92]
+
     size = len(test_world)
     print(is_valid_location(size, 0, 0))
     print(not is_valid_location(size, -1, 0))
     print(not is_valid_location(size, 0, 3))
     print(is_valid_location(size, 2, 2))
 
-    # TODO More tests
+    
+    print(get_neighbours(test_world, 0, 0) == [Actor.NONE, Actor.RED, Actor.BLUE])
+    print((add_actors(Actor.BLUE, dist[0])) == [Actor.BLUE, Actor.BLUE, Actor.BLUE, Actor.BLUE])
+    print((check_satisfaction(th, size, test_world)) == [Actor.BLUE])
 
-    exit(0)
+    
+def check_satisfaction(th, size, world):
+        unsatisfied_list = []
+        for row in range(size):
+            for column in range(size):
+                current_actor = world[row][column]
+                if current_actor != Actor.NONE:
+                    neighbours = get_neighbours(world, row, column)
+                    number_of_similar = count(neighbours, current_actor)
+                    number_of_none = count(neighbours, Actor.NONE)
+                    if number_of_similar < ceil(th * (len(neighbours)-number_of_none)):
+                        world[row][column] = Actor.NONE
+                        unsatisfied_list.append(current_actor)
+        return unsatisfied_list
+
+
+
 
 
 # Helper method for testing
@@ -299,3 +319,4 @@ class NeighboursView:
 
 if __name__ == "__main__":
     neighbours()
+    test()
