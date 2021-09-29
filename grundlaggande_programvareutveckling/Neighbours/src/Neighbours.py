@@ -25,7 +25,7 @@ class State(Enum):
 
 World = List[List[Actor]]  # Type alias
 
-SIZE = 30
+SIZE = 100
 
 
 def neighbours():
@@ -38,8 +38,8 @@ def neighbours():
 class NeighborsModel:
     # Tune these numbers to test different distributions or update speeds
     FRAME_RATE = 200  # Increase number to speed simulation up
-    DIST = [0.7, 0.2, 0.1]  # % of RED, BLUE, and NONE
-    THRESHOLD = 0.8  # % of surrounding neighbours that should be like me for satisfaction
+    DIST = [0.4, 0.4, 0.2]  # % of RED, BLUE, and NONE
+    THRESHOLD = 0.7  # % of surrounding neighbours that should be like me for satisfaction
 
     size = SIZE
 
@@ -108,10 +108,8 @@ class NeighborsModel:
     def insert_unsatisfied_actors(self, none_index_list, unsatisfied_agents):
         shuffle(unsatisfied_agents)
         shuffle(none_index_list)
-        while len(none_index_list)-1 > 0:
+        while len(none_index_list)-1 > 0 and len(unsatisfied_agents) - 1 > 0:
             self.world[none_index_list[0][0]][none_index_list[0][1]] = unsatisfied_agents.pop(0)
-            
-            print (self.world[none_index_list[0][0]][none_index_list[0][1]])
             none_index_list.pop(0)
         
 
@@ -125,17 +123,15 @@ class NeighborsModel:
 
     def get_none_actor_index(self):
             list_of_none_index = []
-            
             for row in range(self.size):
                 for col in range(self.size):
                     if self.world[row][col] == Actor.NONE:
                         index_of_none = []
                         index_of_none.append(row)
                         index_of_none.append(col)
-                        list_of_none_index.append(index_of_none)
-                        print(list_of_none_index)
-                        
+                        list_of_none_index.append(index_of_none)                        
             return list_of_none_index
+
     def pop_unsatisfied_actors(self):
         unsatisfied_list = []
         for row in range(self.size):
@@ -151,10 +147,8 @@ class NeighborsModel:
         neighbours = get_neighbours(world, row, column)
         number_of_similar = count(neighbours, current)
         number_of_none = count(neighbours, Actor.NONE)
-        if number_of_similar < ceil(self.THRESHOLD * (len(neighbours)-number_of_none)):
-            return True
-        else: 
-            return False
+        return number_of_similar < ceil(self.THRESHOLD * (len(neighbours)-number_of_none))
+
 
 
 
@@ -188,13 +182,13 @@ def dist_list_into_matrix(dist_list):
 def get_neighbours(matrix, row, column):
     neighbours = []
     for i in [-1, 1]:
-        if row + i >= 0 and row + i < len(matrix):
+        if is_valid_location(NeighborsModel.size, row + i, column):
             neighbours.append(matrix[row + i][column])
-        if column + i >= 0 and column + i < len(matrix):
+        if is_valid_location(NeighborsModel.size, row, column + i):
             neighbours.append(matrix[row][column + i])
-        if row + i >= 0 and column - i >= 0 and row + i < len(matrix) and column - i < len(matrix):
+        if is_valid_location(NeighborsModel.size, row + i, column - i):
             neighbours.append(matrix[row + i][column - i])
-        if row + i >= 0 and column + i >= 0 and row + i < len(matrix) and column + i < len(matrix):
+        if is_valid_location(NeighborsModel.size, row + i, column + i):
             neighbours.append(matrix[row + i][column + i])
     return neighbours
 
